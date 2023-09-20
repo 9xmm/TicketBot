@@ -20,7 +20,7 @@ async def send_message(message, user_message, is_private):
 ########################################
         
 def run_discord_bot():
-    TOKEN = 'MTE1MTU3NTg0MjU2OTMyNjU5Mg.GZNBSm.uMTmxDep4t-IOn2xyNTR-Bt7b7VoNBvX0U0U68'
+    TOKEN = 'MTE1MTU3NTg0MjU2OTMyNjU5Mg.GTYKSL.o6AHsAOk1TUjtOGEGd-ePM2u_EvX4zR5Bhf6mM'
     intents = discord.Intents.default()
     intents.message_content = True
     client = discord.Client(intents=intents)
@@ -29,7 +29,7 @@ def run_discord_bot():
     async def delete_inactive_channels():
         category_name = "closed tickets"
         # Get the current server (guild)
-        guild = discord.utils.get(client.guilds, name='9xm server') 
+        guild = discord.utils.get(client.guilds, name='MachinaTrader') 
         if guild is None:
             print("Guild not found.")
             return
@@ -51,11 +51,13 @@ def run_discord_bot():
 
     @client.event
     async def on_message(message):
-        if message.author == client.user:
-            if message.author.bot or not message.guild:
-                return
+        if message.author == client.user or message.author.bot:
+            return  # Ignore message from bots
+        if not message.guild:
+            return  # Ignore private messages
+        
         # Check message sent in channel under category "created tickets"
-        if message.channel.category and message.channel.category.name.lower() == "created tickets":
+        if message.channel.category.name.lower() == "created tickets":
             if message.channel.id not in welcome_sent:
                 await message.channel.send("Thanks for showing interest in our vision! Please follow this link to fill out our collab form: https://www.machinatrader.com/collab-and-influencer-registration/ :relaxed:")
                 welcome_sent[message.channel.id] = True
